@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Diabetes Prediction Using ML</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Top Navigation / Brand Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">DIABETES PREDICTION USING ML</a>
+            <span class="nav-badge">Academic ML Prototype</span>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Result Presentation Section -->
+        <section class="result-wrapper">
+            <h1 class="page-heading">Prediction Result</h1>
+
+            {% if prediction == 1 %}
+            <!-- Diabetic Classification Card -->
+            <div class="card result-card result-positive">
+                <div class="result-status-badge badge-diabetic">
+                    Predicted Class: 1
+                </div>
+                <h2 class="result-title">DIABETIC CLASSIFICATION</h2>
+                <p class="result-explanation">
+                    The Decision Tree model classified the provided input as diabetic.
+                </p>
+                <div class="model-attribution">
+                    Prediction generated using Decision Tree Classifier
+                </div>
+            </div>
+            {% else %}
+            <!-- Non-Diabetic Classification Card -->
+            <div class="card result-card result-negative">
+                <div class="result-status-badge badge-non-diabetic">
+                    Predicted Class: 0
+                </div>
+                <h2 class="result-title">NON-DIABETIC CLASSIFICATION</h2>
+                <p class="result-explanation">
+                    The Decision Tree model classified the provided input as non-diabetic.
+                </p>
+                <div class="model-attribution">
+                    Prediction generated using Decision Tree Classifier
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Submitted Patient Input Parameters Summary -->
+            {% if patient_data %}
+            <div class="card summary-card">
+                <h3>Submitted Patient Parameters</h3>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Submitted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, val in patient_data.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td><strong>{{ val }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Action Button -->
+            <div class="result-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-large">
+                    Predict Again
+                </a>
+            </div>
+
+            <!-- Academic Disclaimer -->
+            <footer class="page-footer">
+                <p class="disclaimer">
+                    ⚠️ This application is an academic ML prototype and is not a medical diagnosis tool.
+                </p>
+                <p class="footer-credit">
+                    Decision Tree Classification &bull; Academic Machine Learning Project
+                </p>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>

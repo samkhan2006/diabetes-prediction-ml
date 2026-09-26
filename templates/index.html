@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction Using ML</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Top Navigation / Brand Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <span class="nav-brand">DIABETES PREDICTION USING ML</span>
+            <span class="nav-badge">Academic ML Prototype</span>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">DIABETES PREDICTION USING ML</h1>
+            <h2 class="hero-subtitle">Machine Learning Based Diabetes Risk Classification</h2>
+            <p class="hero-description">
+                This prototype uses a Decision Tree machine learning model to classify diabetes risk based on selected health parameters.
+            </p>
+        </section>
+
+        <!-- Validation Error Message Alert -->
+        {% if error %}
+        <div class="alert alert-error" role="alert">
+            <span class="alert-icon">⚠️</span>
+            <span class="alert-text">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Prediction Card / Patient Information Form -->
+        <section class="card prediction-card">
+            <div class="card-header">
+                <h2>Patient Information</h2>
+                <p>Enter the patient's diagnostic measurements below for ML classification.</p>
+            </div>
+
+            <form action="{{ url_for('predict') }}" method="POST" class="prediction-form" novalidate>
+                <div class="form-grid">
+                    <!-- 1. Pregnancies -->
+                    <div class="form-group">
+                        <label for="Pregnancies">Pregnancies</label>
+                        <input 
+                            type="number" 
+                            id="Pregnancies" 
+                            name="Pregnancies" 
+                            min="0" 
+                            max="25" 
+                            step="1"
+                            placeholder="Enter number of pregnancies" 
+                            value="{{ form_values.get('Pregnancies', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Total number of pregnancies (e.g., 2)</span>
+                    </div>
+
+                    <!-- 2. Glucose -->
+                    <div class="form-group">
+                        <label for="Glucose">Glucose</label>
+                        <input 
+                            type="number" 
+                            id="Glucose" 
+                            name="Glucose" 
+                            min="1" 
+                            max="500" 
+                            step="any"
+                            placeholder="Enter glucose level" 
+                            value="{{ form_values.get('Glucose', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Plasma glucose concentration (mg/dL)</span>
+                    </div>
+
+                    <!-- 3. Blood Pressure -->
+                    <div class="form-group">
+                        <label for="BloodPressure">Blood Pressure</label>
+                        <input 
+                            type="number" 
+                            id="BloodPressure" 
+                            name="BloodPressure" 
+                            min="0" 
+                            max="300" 
+                            step="any"
+                            placeholder="Enter blood pressure" 
+                            value="{{ form_values.get('BloodPressure', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Diastolic blood pressure (mm Hg)</span>
+                    </div>
+
+                    <!-- 4. Skin Thickness -->
+                    <div class="form-group">
+                        <label for="SkinThickness">Skin Thickness</label>
+                        <input 
+                            type="number" 
+                            id="SkinThickness" 
+                            name="SkinThickness" 
+                            min="0" 
+                            max="120" 
+                            step="any"
+                            placeholder="Enter skin thickness" 
+                            value="{{ form_values.get('SkinThickness', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Triceps skin fold thickness (mm)</span>
+                    </div>
+
+                    <!-- 5. Insulin -->
+                    <div class="form-group">
+                        <label for="Insulin">Insulin</label>
+                        <input 
+                            type="number" 
+                            id="Insulin" 
+                            name="Insulin" 
+                            min="0" 
+                            max="1000" 
+                            step="any"
+                            placeholder="Enter insulin level" 
+                            value="{{ form_values.get('Insulin', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">2-Hour serum insulin (mu U/ml)</span>
+                    </div>
+
+                    <!-- 6. BMI -->
+                    <div class="form-group">
+                        <label for="BMI">BMI</label>
+                        <input 
+                            type="number" 
+                            id="BMI" 
+                            name="BMI" 
+                            min="5" 
+                            max="90" 
+                            step="0.1"
+                            placeholder="Enter body mass index" 
+                            value="{{ form_values.get('BMI', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Body Mass Index: weight in kg/(height in m)²</span>
+                    </div>
+
+                    <!-- 7. Diabetes Pedigree Function -->
+                    <div class="form-group">
+                        <label for="DiabetesPedigreeFunction">Diabetes Pedigree</label>
+                        <input 
+                            type="number" 
+                            id="DiabetesPedigreeFunction" 
+                            name="DiabetesPedigreeFunction" 
+                            min="0" 
+                            max="5" 
+                            step="0.001"
+                            placeholder="Enter diabetes pedigree function" 
+                            value="{{ form_values.get('DiabetesPedigreeFunction', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Genetic risk score based on family history</span>
+                    </div>
+
+                    <!-- 8. Age -->
+                    <div class="form-group">
+                        <label for="Age">Age</label>
+                        <input 
+                            type="number" 
+                            id="Age" 
+                            name="Age" 
+                            min="1" 
+                            max="120" 
+                            step="1"
+                            placeholder="Enter age" 
+                            value="{{ form_values.get('Age', '') }}" 
+                            required
+                        >
+                        <span class="field-hint">Patient age in completed years</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        PREDICT DIABETES RISK
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Information Cards Grid -->
+        <div class="info-grid">
+            <!-- Machine Learning Model Section -->
+            <section class="card info-card">
+                <h3>Machine Learning Model</h3>
+                <div class="model-badge">Decision Tree Classifier</div>
+                <p>
+                    A Decision Tree is a supervised machine learning algorithm that makes predictions by applying a sequence of feature-based decisions.
+                </p>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <strong>Input:</strong> 8 health-related features
+                    </div>
+                    <div class="spec-item">
+                        <strong>Output:</strong> 
+                        <span>0 — Non-Diabetic</span> | <span>1 — Diabetic</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Information Section -->
+            <section class="card info-card">
+                <h3>About the Project</h3>
+                <p>
+                    This project demonstrates the use of supervised machine learning for diabetes prediction. Patient-related health parameters are provided as input to a trained Decision Tree classifier, which produces a binary classification.
+                </p>
+                <div class="academic-note">
+                    <strong>Research Context:</strong> Machine Learning Research Article Review and Implementation<br>
+                    <strong>Topic:</strong> Diabetes Prediction Using ML
+                </div>
+            </section>
+        </div>
+
+        <!-- Academic Disclaimer -->
+        <footer class="page-footer">
+            <p class="disclaimer">
+                ⚠️ This application is an academic ML prototype and is not a medical diagnosis tool.
+            </p>
+            <p class="footer-credit">
+                Supervised Learning Academic Demonstration &bull; Built with Flask &amp; Scikit-learn
+            </p>
+        </footer>
+    </main>
+</body>
+</html>
